@@ -42,18 +42,15 @@ order by sum(amount) desc
 limit 1)));
 
 
-#FALTA TEMRINAR!
--- Customers who spent more than the average payments.
-select avg(totalAmounts) 
-from 
-(
-select (sum(amount)) as 'totalspent' 
-from payment 
-group by customer_id 
-order by sum(amount) desc 
-) as 'totalAmounts';
-having 'totalspent' > 'avgspent';
 
+-- Customers who spent more than the average payments.
+
+select customer_id, sum(amount)from payment
+group by customer_id
+having sum(amount) > (select avg(average) from (select sum(amount) as average from payment
+group by customer_id
+order by sum(amount) desc)sub1)
+order by sum(amount) desc;
 
 
 
